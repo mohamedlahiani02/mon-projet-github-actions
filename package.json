@@ -1,0 +1,13 @@
+{
+  "name": "github-actions-demo",
+  "version": "1.0.0",
+  "description": "Projet simple pour apprendre GitHub Actions",
+  "main": "src/calculator.js",
+  "scripts": {
+    "test": "node tests/calculator.test.js",
+    "start": "node src/calculator.js"
+  },
+  "keywords": ["github-actions", "ci-cd", "demo"],
+  "author": "Mohamed",
+  "license": "MIT"
+}

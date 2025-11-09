@@ -1,0 +1,131 @@
+name: CI - Tests Automatiques
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  info:
+    name: Informations du Workflow
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Afficher les informations
+        run: |
+          echo "🚀 Workflow déclenché par: ${{ github.event_name }}"
+          echo "🔀 Branche: ${{ github.ref_name }}"
+          echo "👤 Auteur: ${{ github.actor }}"
+          echo "📦 Repository: ${{ github.repository }}"
+          echo "💻 Système: Ubuntu Latest"
+          echo "📅 Date: $(date)"
+
+  test:
+    name: Exécuter les Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout du code
+        uses: actions/checkout@v4
+      
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: 📋 Vérifier Node.js
+        run: |
+          echo "Version de Node.js installée:"
+          node --version
+          echo "Version de npm installée:"
+          npm --version
+      
+      - name: 📦 Installer les dépendances
+        run: npm install
+      
+      - name: 🎯 Lancer l'application
+        run: npm start
+      
+      - name: 🧪 Exécuter les tests
+        run: npm test
+      
+      - name: ✅ Tests réussis
+        if: success()
+        run: |
+          echo "============================================"
+          echo "✅ Tous les tests sont passés avec succès !"
+          echo "✅ Le code est prêt pour le déploiement"
+          echo "============================================"
+      
+      - name: ❌ Tests échoués
+        if: failure()
+        run: |
+          echo "============================================"
+          echo "❌ Les tests ont échoué"
+          echo "❌ Vérifiez les logs ci-dessus"
+          echo "============================================"
+
+  build:
+    name: Build de l'Application
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+      - name: 📥 Checkout du code
+        uses: actions/checkout@v4
+      
+      - name: 🔨 Simuler un build
+        run: |
+          echo "Construction de l'application..."
+          mkdir -p dist
+          cp src/calculator.js dist/
+          echo "Build terminé !"
+          ls -la dist/
+      
+      - name: 📤 Sauvegarder l'artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: application-build
+          path: dist/
+      
+      - name: ✅ Build réussi
+        run: echo "✅ Application buildée et artefact sauvegardé"
+
+  summary:
+    name: Résumé Final
+    runs-on: ubuntu-latest
+    needs: [test, build]
+    if: always()
+    
+    steps:
+      - name: 📊 Résumé du Pipeline
+        run: |
+          echo "================================"
+          echo "📊 RÉSUMÉ DU PIPELINE CI/CD"
+          echo "================================"
+          echo "Repository: ${{ github.repository }}"
+          echo "Branche: ${{ github.ref_name }}"
+          echo "Commit: ${{ github.sha }}"
+          echo "Auteur: ${{ github.actor }}"
+          echo "================================"
+          echo "✅ Pipeline terminé"
+```
+
+**Enregistrer** : Ctrl+S puis fermer.
+
+---
+
+### Fichier 5 : `.gitignore`
+
+**Ouvrir avec** : `notepad .gitignore`
+
+**Copier ce contenu** :
+```
+node_modules/
+dist/
+build/
+*.log
+.DS_Store
+Thumbs.db
+.env
+.env.local
