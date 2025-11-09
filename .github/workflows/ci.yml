@@ -108,24 +108,6 @@ jobs:
           echo "Commit: ${{ github.sha }}"
           echo "Auteur: ${{ github.actor }}"
           echo "================================"
-          echo "✅ Pipeline terminé"
-```
-
-**Enregistrer** : Ctrl+S puis fermer.
-
----
-
-### Fichier 5 : `.gitignore`
-
-**Ouvrir avec** : `notepad .gitignore`
-
-**Copier ce contenu** :
-```
-node_modules/
-dist/
-build/
-*.log
-.DS_Store
-Thumbs.db
-.env
-.env.local
+          echo "✅ Pipeline terminé" avec le statut: ${{ job.status }}
+          echo "================================"
+          
